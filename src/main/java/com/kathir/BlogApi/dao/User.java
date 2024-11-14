@@ -45,7 +45,10 @@ public class User implements UserDetails{
     this.email = email;
     this.password = password;
     }
-
+    public User()
+    {
+        
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
