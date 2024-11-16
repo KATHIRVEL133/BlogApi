@@ -76,7 +76,7 @@ public class AuthenticationService {
         throw new RuntimeException("User not found");
     }
     }
-    public void resendVerificaitonCode(String email)
+    public void resendVerificationCode(String email)
     {
     Optional<User> optionalUser = userRepository.findByemail(email);
     if(optionalUser.isPresent())
