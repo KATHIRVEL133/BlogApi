@@ -1,6 +1,7 @@
 package com.kathir.BlogApi.dao;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,8 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.Data;
 
 @Entity
@@ -32,11 +33,21 @@ public class Post {
     @Column(unique = true,nullable = false)
     private String slug;
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+   
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public Post(long userId,String content,String title,String image,String category,String slug)
     {
@@ -49,6 +60,6 @@ public class Post {
     }
     public Post()
     {
-        
+
     }
 }

@@ -25,4 +25,4 @@ spring:
 security:
   jwt:
     secret-key: "k8e6kD2v4T5L9f1X7bQ3v6T7xQ9kR3uPchgchjggvkgvkvkuv"
-    expiration-time: "360000"
+    expiration-time: 3600000

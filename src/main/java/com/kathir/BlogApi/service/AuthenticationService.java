@@ -30,7 +30,7 @@ public class AuthenticationService {
     }
     public User signup(RegisterUserDto input)
     {
-    User user = new User(input.getUsername(),input.getEamil(),passwordEncoder.encode(input.getPassword()));
+    User user = new User(input.getUsername(),input.getEmail(),passwordEncoder.encode(input.getPassword()));
     user.setVerificationCode(getVerificationCode());
     user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
     user.setEnabled(false);
@@ -39,7 +39,7 @@ public class AuthenticationService {
     }
     public User authenticateUser(LoginUserDto input)
     {
-     User user = userRepository.findByemail(input.getEmail()).orElseThrow(()-> new RuntimeException("User not found"));
+     User user = userRepository.findByEmail(input.getEmail()).orElseThrow(()-> new RuntimeException("User not found"));
      if(!user.isEnabled())
      {
          throw new RuntimeException("Account is not verified. Please verify your code ");
@@ -51,7 +51,7 @@ public class AuthenticationService {
     }
     public void verifyUser(VerifyUserDto input)
     {
-    Optional<User> optionalUser = userRepository.findByemail(input.getEmail());
+    Optional<User> optionalUser = userRepository.findByEmail(input.getEmail());
     if(optionalUser.isPresent())
     {
     User user = optionalUser.get();
@@ -78,7 +78,7 @@ public class AuthenticationService {
     }
     public void resendVerificationCode(String email)
     {
-    Optional<User> optionalUser = userRepository.findByemail(email);
+    Optional<User> optionalUser = userRepository.findByEmail(email);
     if(optionalUser.isPresent())
     {
         User user = optionalUser.get();

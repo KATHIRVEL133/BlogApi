@@ -26,7 +26,7 @@ public class User implements UserDetails{
     private Long Id;
     @Column(unique = true , nullable = false)
     private String username;
-    @Column(unique = true , nullable = false)
+    @Column(unique = true,nullable = false)
     private String email;
     @Column(nullable = false)
     private String password;
@@ -74,17 +74,9 @@ public class User implements UserDetails{
         return enabled;
      }
 
-    @Override
-    public String getPassword() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
+   
 
-    @Override
-    public String getUsername() {
-     
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
-    }
+   
    
     
 }
