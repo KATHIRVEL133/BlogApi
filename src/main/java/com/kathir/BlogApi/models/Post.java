@@ -1,11 +1,8 @@
-package com.kathir.BlogApi.dao;
+package com.kathir.BlogApi.models;
 
-import java.sql.Date;
+
 import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,16 +23,17 @@ public class Post {
     private long userId;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String title;
     private String image="https://www.blogtyrant.com/wp-content/uploads/2017/02/how-to-write-a-good-blog-post.png";
     private String category = "uncategorized";
     @Column(unique = true,nullable = false)
     private String slug;
+
     @CreatedDate
-   
     @Column(nullable = false)
     private LocalDateTime createdAt;
+    
 
     private LocalDateTime updatedAt;
 
