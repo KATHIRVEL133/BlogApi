@@ -81,7 +81,7 @@ public class PostService {
             post.setImage(updatePostRequest.getImage());
         }
         Post savedPost = postRepository.save(post);
-        ResponseEntity.ok().body(savedPost);
+        ResponseEntity.status(200).body(savedPost);
         }
         else
         {
@@ -93,5 +93,24 @@ public class PostService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
     }
     return ResponseEntity.ok().body("ok");
+    }
+    public ResponseEntity<?> deletePost(long postId)
+    {
+     Optional<Post> exitsPost = postRepository.findById(postId);
+     if(exitsPost.isPresent())
+     {
+     postRepository.deleteById(postId);
+     return ResponseEntity.status(200).body("post deleted successfully");
+     }
+     return ResponseEntity.status(400).body("post not present");
+    }
+    public ResponseEntity<?> getPostById(long postId)
+    {
+    Optional<Post> post = postRepository.getPostById(postId);
+    if(post.isPresent())
+    {
+        return ResponseEntity.status(200).body(post);
+    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("post not present");
     }
 }
