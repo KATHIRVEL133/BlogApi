@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kathir.BlogApi.payload.request.PostRequest;
+import com.kathir.BlogApi.payload.request.SearchPostRequest;
 import com.kathir.BlogApi.payload.request.UpdatePostRequest;
 import com.kathir.BlogApi.security.services.PostService;
 import com.kathir.BlogApi.security.services.UserDetailsImpl;
@@ -76,5 +77,11 @@ public class PostController {
     public ResponseEntity<?> getPostById(@PathVariable long postId)
     {
      return postService.getPostById(postId);
+    }
+    @PostMapping("/getPosts")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getPosts(@RequestBody SearchPostRequest searchPostRequest)
+    {
+    return postService.getAllPosts(searchPostRequest);
     }
 }

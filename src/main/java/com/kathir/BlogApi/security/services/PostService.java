@@ -1,19 +1,31 @@
 package com.kathir.BlogApi.security.services;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.kathir.BlogApi.models.Post;
 import com.kathir.BlogApi.payload.request.PostRequest;
+import com.kathir.BlogApi.payload.request.SearchPostRequest;
 import com.kathir.BlogApi.payload.request.UpdatePostRequest;
 import com.kathir.BlogApi.repository.PostRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 @Service
 public class PostService {
     public PostRepository postRepository;
+     @PersistenceContext
+    private EntityManager entityManager;
+
     public PostService(PostRepository postRepository)
     {
         this.postRepository = postRepository;
@@ -112,5 +124,38 @@ public class PostService {
         return ResponseEntity.status(200).body(post);
     }
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("post not present");
+    }
+
+    public ResponseEntity<?> getAllPosts(SearchPostRequest request)
+    {
+    HashMap<String,Object> res = new HashMap<>();     
+    int startIndex = request.getStartIndex();
+        int limit = request.getLimit();
+        Sort.Direction sortDirection = request.getSort().equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        // Fetch posts
+        List<Post> posts = postRepository.findPosts(
+                request.getUserId(),
+                request.getCategory(),
+                request.getSlug(),
+                request.getPostId(),
+                request.getSearchTerm()
+        );
+
+        // Apply pagination manually
+        int fromIndex = Math.min(startIndex, posts.size());
+        int toIndex = Math.min(fromIndex + limit, posts.size());
+        List<Post> paginatedPosts = posts.subList(fromIndex, toIndex);
+
+
+   
+    long totalPosts = postRepository.countAllPosts();
+    Date currentDate = new Date();
+    long lastMonthPosts = postRepository.countPostsExcludingLastMonth(currentDate);
+    res.put("posts",posts);
+    res.put("totalPosts",totalPosts);
+    res.put("currentDate", currentDate);
+    res.put("lastMonthPosts", lastMonthPosts);
+    return ResponseEntity.status(200).body(res);
     }
 }
