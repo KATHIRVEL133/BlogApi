@@ -77,4 +77,16 @@ public class UserService {
      }
 
     }
+    public ResponseEntity<?> deleteUser(long userId)
+    { 
+    try
+    {
+    userRepository.deleteById(userId);
+    }
+    catch(Exception e)
+    {
+      return ResponseEntity.status(400).body(e);
+    }
+    return ResponseEntity.status(200).body("User Deleted Successfully");
+    }
 }
