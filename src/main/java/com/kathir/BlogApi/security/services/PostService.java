@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Sort;
+//import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import com.kathir.BlogApi.repository.PostRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+//import jakarta.persistence.Query;
 
 @Service
 public class PostService {
@@ -131,7 +131,7 @@ public class PostService {
     HashMap<String,Object> res = new HashMap<>();     
     int startIndex = request.getStartIndex();
         int limit = request.getLimit();
-        Sort.Direction sortDirection = request.getSort().equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        //Sort.Direction sortDirection = request.getSort().equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 
         // Fetch posts
         List<Post> posts = postRepository.findPosts(
@@ -145,7 +145,7 @@ public class PostService {
         // Apply pagination manually
         int fromIndex = Math.min(startIndex, posts.size());
         int toIndex = Math.min(fromIndex + limit, posts.size());
-        List<Post> paginatedPosts = posts.subList(fromIndex, toIndex);
+        //List<Post> paginatedPosts = posts.subList(fromIndex, toIndex);
 
 
    

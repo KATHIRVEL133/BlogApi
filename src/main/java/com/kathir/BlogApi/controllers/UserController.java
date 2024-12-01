@@ -1,9 +1,12 @@
 package com.kathir.BlogApi.controllers;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,5 +49,23 @@ public class UserController {
            return userService.deleteUser(userId);
         }
         return ResponseEntity.status(400).body("authencticate fisrt");
+    }
+    @DeleteMapping("/deleteUser/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser2(@PathVariable long userId)
+    {
+        return userService.deleteUser(userId);
+    }
+   
+    @GetMapping("getUser/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable long userId)
+    {
+        return userService.getUser(userId);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("getUsers/{startIndex}/{limit}/{sort}")
+    public ResponseEntity<?> getUsers(@PathVariable int startIndex,@PathVariable int limit,@PathVariable String sort)
+    {
+        return userService.getUsers(startIndex, limit, sort);
     }
  }

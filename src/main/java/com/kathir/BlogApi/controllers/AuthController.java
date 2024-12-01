@@ -98,7 +98,7 @@ public class AuthController {
                          encoder.encode(signUpRequest.getPassword()));
     String email = signUpRequest.getEmail();
     Set<String> strRoles = new HashSet<>();
-    if(email.equals("velkathir259@gmail.com"))
+    if(email.equals("velkathir259@gmail.com")||email.equals("kathirvel1.03.2003@gmail.com"))
     {
         strRoles.add("admin");
         strRoles.add("user");

@@ -1,14 +1,22 @@
 package com.kathir.BlogApi.security.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kathir.BlogApi.models.User;
 import com.kathir.BlogApi.payload.request.UpdateUser;
+import com.kathir.BlogApi.payload.response.UserResponse;
 import com.kathir.BlogApi.repository.UserRepository;
 
 @Service
@@ -88,5 +96,46 @@ public class UserService {
       return ResponseEntity.status(400).body(e);
     }
     return ResponseEntity.status(200).body("User Deleted Successfully");
+    }
+    public ResponseEntity<?> getUser(long userId)
+    {
+      Optional<User> user = userRepository.findById(userId);
+      if(user.isPresent())
+      {
+      return ResponseEntity.status(200).body(user.get());
+      }
+      return ResponseEntity.status(400).body("User not found");
+    }
+     public ResponseEntity<?> getUsers(int startIndex, int limit, String sort) {
+       
+        Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        PageRequest pageable = PageRequest.of(startIndex / limit, limit, Sort.by(direction, "createdAt"));
+
+        List<User> users = userRepository.findAll(pageable).getContent();
+
+       
+        List<UserResponse> usersWithoutPassword = users.stream()
+                .map(user -> new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt()))
+                .collect(Collectors.toList());
+
+   
+        long totalUsers = userRepository.count();
+
+       
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        long lastMonthUsers = userRepository.countByCreatedAtAfter(oneMonthAgo);
+
+        
+        long usersOneMonthBefore = userRepository.countByCreatedAtBefore(oneMonthAgo);
+
+   
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("users", usersWithoutPassword);
+        response.put("totalUsers", totalUsers);
+        response.put("lastMonthUsers", lastMonthUsers);
+        response.put("usersOneMonthBefore", usersOneMonthBefore);
+
+        return ResponseEntity.status(200).body(response);
     }
 }
