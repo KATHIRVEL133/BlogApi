@@ -113,29 +113,16 @@ public class UserService {
         PageRequest pageable = PageRequest.of(startIndex / limit, limit, Sort.by(direction, "createdAt"));
 
         List<User> users = userRepository.findAll(pageable).getContent();
-
-       
         List<UserResponse> usersWithoutPassword = users.stream()
                 .map(user -> new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt()))
                 .collect(Collectors.toList());
-
-   
         long totalUsers = userRepository.count();
-
-       
         LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-        long lastMonthUsers = userRepository.countByCreatedAtAfter(oneMonthAgo);
-
-        
-        long usersOneMonthBefore = userRepository.countByCreatedAtBefore(oneMonthAgo);
-
-   
+        long lastMonthUsers = userRepository.countByCreatedAtBefore(oneMonthAgo);
         HashMap<String, Object> response = new HashMap<>();
         response.put("users", usersWithoutPassword);
         response.put("totalUsers", totalUsers);
         response.put("lastMonthUsers", lastMonthUsers);
-        response.put("usersOneMonthBefore", usersOneMonthBefore);
-
         return ResponseEntity.status(200).body(response);
     }
 }

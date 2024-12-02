@@ -62,10 +62,13 @@ public class UserController {
     {
         return userService.getUser(userId);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("getUsers/{startIndex}/{limit}/{sort}")
     public ResponseEntity<?> getUsers(@PathVariable int startIndex,@PathVariable int limit,@PathVariable String sort)
     {
         return userService.getUsers(startIndex, limit, sort);
     }
+
+  
  }

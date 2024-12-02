@@ -23,7 +23,7 @@ public class Comment {
     private String comment;
     private long userId;
     private long postId;
-    private List<String> likes;
+    private List<Long> likes;
     private long numberOfLikes;
     
      private LocalDateTime createdAt;

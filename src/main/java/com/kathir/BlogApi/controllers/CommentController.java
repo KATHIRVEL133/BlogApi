@@ -87,4 +87,12 @@ public class CommentController {
         
         return commentService.deleteComment2(commentId);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("getComments/{startIndex}/{limit}/{sort}")
+    public ResponseEntity<?> getComments(@PathVariable int startIndex,@PathVariable int limit,@PathVariable String sort)
+    {
+        return commentService.getComments(startIndex, limit, sort);
+    }
+
 }
